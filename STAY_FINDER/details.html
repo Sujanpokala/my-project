@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body{margin:0;font-family:Arial;background:#f7f7f7}
+.container{padding:20px}
+.slider img{width:100%;height:300px;border-radius:15px;object-fit:cover}
+.box{background:white;padding:15px;margin-top:15px;border-radius:15px}
+button{width:100%;padding:12px;background:#ff385c;color:white;border:none}
+</style>
+</head>
+
+<body>
+
+<div class="container" id="details"></div>
+
+<script>
+const data = JSON.parse(localStorage.getItem("allData"));
+const id = +localStorage.getItem("selectedStay");
+const item = data.find(d=>d.id===id);
+
+let images=[item.img,item.img,item.img];
+
+let i=0;
+
+function render(){
+details.innerHTML=`
+<div class="slider">
+<img id="slide" src="${images[0]}">
+</div>
+
+<h2>${item.name}</h2>
+<p>${item.city}</p>
+<p>⭐ ${(Math.random()*1+4).toFixed(1)}</p>
+
+<div class="box">
+<p><b>₹${item.price}/night</b></p>
+
+<input type="date" id="in"><br><br>
+<input type="date" id="out"><br><br>
+
+<p id="total">Total: ₹0</p>
+
+<button onclick="calc()">Calculate</button><br><br>
+<button onclick="location.href='payment.html'">Reserve</button>
+</div>
+
+<div class="box">
+<h3>Location</h3>
+<iframe width="100%" height="200"
+src="https://maps.google.com/maps?q=${item.city},India&output=embed"></iframe>
+</div>
+`;
+}
+
+setInterval(()=>{
+let slide=document.getElementById("slide");
+if(slide){
+i=(i+1)%images.length;
+slide.src=images[i];
+}
+},2000);
+
+function calc(){
+const a=new Date(document.getElementById("in").value);
+const b=new Date(document.getElementById("out").value);
+const days=(b-a)/(1000*60*60*24);
+document.getElementById("total").innerText="Total: ₹"+(days>0?days*item.price:0);
+}
+
+render();
+</script>
+
+</body>
+</html>
