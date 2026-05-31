@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StayFinder India</title>
+
+<style>
+body{margin:0;font-family:Arial;background:#f7f7f7}
+
+/* NAV */
+.nav{
+  display:flex;
+  justify-content:space-between;
+  padding:15px;
+  background:white;
+  position:sticky;
+  top:0;
+}
+
+.nav-right{display:flex;gap:15px}
+
+/* SEARCH */
+.search-wrapper{
+  display:flex;
+  justify-content:center;
+  margin:30px 0;
+}
+
+.search-box{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:14px 20px;
+  border-radius:50px;
+  background:white;
+  box-shadow:0 5px 20px rgba(0,0,0,0.15);
+  width:70%;
+  max-width:800px;
+}
+
+.search-box input{
+  flex:1;
+  border:none;
+  outline:none;
+  font-size:16px;
+}
+
+.search-box button{
+  background:#ff385c;
+  border:none;
+  color:white;
+  padding:10px 14px;
+  border-radius:50%;
+}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:20px;
+  padding:20px;
+}
+
+.card{
+  background:white;
+  border-radius:12px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.card:hover{transform:scale(1.03)}
+
+.card img{
+  width:100%;
+  height:150px;
+  object-fit:cover;
+}
+
+.card-content{padding:10px}
+</style>
+</head>
+
+<body>
+
+<div class="nav">
+  <h2>StayFinder</h2>
+  <div class="nav-right">
+    <span>Become a host</span> ☰ 👤
+  </div>
+</div>
+
+<div class="search-wrapper">
+  <div class="search-box">
+    <input id="search" placeholder="Search destinations">
+    <button>🔍</button>
+  </div>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<script>
+const data = [
+
+{
+  city:"Goa",
+  img:"https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?q=80&w=1200&auto=format&fit=crop"
+},
+
+{
+  city:"Pondicherry",
+  img:"https://images.unsplash.com/photo-1593693411515-c20261bcad6e?q=80&w=1200&auto=format&fit=crop"
+},
+
+{
+  city:"Manali",
+  img:"https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?q=80&w=1200&auto=format&fit=crop"
+},
+
+{
+  city:"Leh Ladakh",
+  img:"https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?q=80&w=1200&auto=format&fit=crop"
+},
+
+{
+  city:"Jaipur",
+  img:"https://images.unsplash.com/photo-1477587458883-47145ed94245?q=80&w=1200&auto=format&fit=crop"
+},
+
+{
+  city:"Udaipur",
+  img:"https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?q=80&w=1200&auto=format&fit=crop"
+},
+
+{
+  city:"Agra",
+  img:"https://images.unsplash.com/photo-1564507592333-c60657eea523?q=80&w=1200&auto=format&fit=crop"
+},
+
+{
+  city:"Varanasi",
+  img:"https://images.unsplash.com/photo-1561361058-c24cecae35ca?q=80&w=1200&auto=format&fit=crop"
+},
+
+{
+  city:"Rishikesh",
+  img:"https://images.unsplash.com/photo-1627894483216-2138af692e32?q=80&w=1200&auto=format&fit=crop"
+},
+
+{
+  city:"Shimla",
+  img:"https://images.unsplash.com/photo-1597074866923-dc0589150358?q=80&w=1200&auto=format&fit=crop"
+},
+
+{
+  city:"Darjeeling",
+  img:"https://images.pexels.com/photos/2409953/pexels-photo-2409953.jpeg"
+},
+
+{
+  city:"Gangtok",
+  img:"https://images.unsplash.com/photo-1617469165786-8007eda3caa7?q=80&w=1200&auto=format&fit=crop"
+},
+
+{
+  city:"Ooty",
+  img:"https://images.pexels.com/photos/417074/pexels-photo-417074.jpeg"
+},
+
+{
+  city:"Munnar",
+  img:"https://images.pexels.com/photos/1268855/pexels-photo-1268855.jpeg"
+},
+
+{
+  city:"Alleppey",
+  img:"https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?q=80&w=1200&auto=format&fit=crop"
+},
+
+{
+  city:"Coorg",
+  img:"https://images.unsplash.com/photo-1622308644420-b20142dc993c?q=80&w=1200&auto=format&fit=crop"
+},
+
+{
+  city:"Hampi",
+  img:"https://images.pexels.com/photos/3889843/pexels-photo-3889843.jpeg"
+},
+
+{
+  city:"Mysore",
+  img:"https://images.pexels.com/photos/1583244/pexels-photo-1583244.jpeg"
+},
+
+{
+  city:"Hyderabad",
+  img:"https://images.unsplash.com/photo-1633265486064-086b219458ec?q=80&w=1200&auto=format&fit=crop"
+},
+
+{
+  city:"Mumbai",
+  img:"https://images.unsplash.com/photo-1529253355930-ddbe423a2ac7?q=80&w=1200&auto=format&fit=crop"
+},
+
+{
+  city:"Delhi",
+  img:"https://images.unsplash.com/photo-1587474260584-136574528ed5?q=80&w=1200&auto=format&fit=crop"
+},
+
+{
+  city:"Kolkata",
+  img:"https://images.unsplash.com/photo-1558431382-27e303142255?q=80&w=1200&auto=format&fit=crop"
+},
+
+{
+  city:"Chennai",
+  img:"https://images.unsplash.com/photo-1566552881560-0be862a7c445?q=80&w=1200&auto=format&fit=crop"
+},
+
+{
+  city:"Bangalore",
+  img:"https://images.unsplash.com/photo-1596176530529-78163a4f7af2?q=80&w=1200&auto=format&fit=crop"
+},
+
+{
+  city:"Andaman",
+  img:"https://images.unsplash.com/photo-1500375592092-40eb2168fd21?q=80&w=1200&auto=format&fit=crop"
+},
+
+{
+  city:"Lakshadweep",
+  img:"https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop"
+},
+
+{
+  city:"Kashmir",
+  img:"https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1200&auto=format&fit=crop"
+},
+
+{
+  city:"Spiti Valley",
+  img:"https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop"
+},
+
+{
+  city:"Tawang",
+  img:"https://images.unsplash.com/photo-1519904981063-b0cf448d479e?q=80&w=1200&auto=format&fit=crop"
+}
+
+];
+
+const finalData = data.map((d,i)=>({
+  id:i+1,
+  name:"Stay "+(i+1),
+  city:d.city,
+  price: Math.floor(Math.random()*8000)+2000,
+  img:d.img
+}));
+
+function openPage(id){
+  localStorage.setItem("selectedStay", id);
+  localStorage.setItem("allData", JSON.stringify(finalData));
+  location.href="details.html";
+}
+
+function display(list){
+  grid.innerHTML="";
+  list.forEach(item=>{
+    grid.innerHTML+=`
+    <div class="card" onclick="openPage(${item.id})">
+      <img src="${item.img}">
+      <div class="card-content">
+        <h3>${item.name}</h3>
+        <p>${item.city}</p>
+        <p>₹${item.price}/night</p>
+      </div>
+    </div>`;
+  });
+}
+
+search.oninput=e=>{
+  let v=e.target.value.toLowerCase();
+  display(finalData.filter(d=>d.city.toLowerCase().includes(v)));
+};
+
+display(finalData);
+</script>
+
+</body>
+</html>
